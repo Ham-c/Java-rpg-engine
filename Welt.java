@@ -41,6 +41,8 @@ public class Welt {
         MusikPlayer.spieleMusik();
         Monster zombie = new Zombie();
         Welt welt = new Welt(0, 0, 12345L, zombie);
+//        MainUi mainUi = new MainUi(welt.spielercharakter);
+//        mainUi.setVisible(true);
         JOptionPane.showMessageDialog(null, "Welt erstellt mit: " + welt.spielercharakter.name);
         System.out.println(welt.spielercharakter.armor);
         while (welt.spielercharakter.hp > 0) {
@@ -51,6 +53,31 @@ public class Welt {
             }
         }
 
+    }
+    public void bewegung() {
+        //Index 0 steht für x, 1 für y.
+        int wahl = Integer.parseInt(
+                JOptionPane.showInputDialog(
+                        null,
+                        "Choose direction to move to.\n" +
+                                "1 = North\n" +
+                                "2 = East\n" +
+                                "3 = South\n" +
+                                "4 = West\n\n" +
+                                "Movement",
+                        JOptionPane.QUESTION_MESSAGE
+                ) );
+        if (wahl == 1){
+            spielercharakter.koordinaten[1] += 1; //norden y neigt ins positive
+        } else if (wahl == 2) {
+            spielercharakter.koordinaten[0] += 1; //Osten x ins positive
+        } else if (wahl == 3) {
+            spielercharakter.koordinaten[1] -= 1; //Süden y ins negative
+        } else {
+            spielercharakter.koordinaten[0] -= 1; //Westen x ins negative
+        }
+        System.out.println("New coordinates: X = " + spielercharakter.koordinaten[0] + " Y = "+ spielercharakter.koordinaten[1]);
+        System.out.println("Monster in sight!!");
     }
 
     public void erfahrung() {
@@ -126,7 +153,7 @@ public class Welt {
             else {System.out.println("Nicht genug Gold");
             openShop();}
         } else {
-            if (spielercharakter.gold >= 25){
+            if (spielercharakter.gold >= 10){
             spielercharakter.waffe = new Steinschwert();}
             else {System.out.println("Nicht genug Gold");
             openShop();}

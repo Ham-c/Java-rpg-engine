@@ -18,6 +18,7 @@ public class Spielercharakter {
     int stufe;
     Map<String, Integer> inventar;
     int gold;
+    int[] koordinaten = {0, 0}; //x, y koordinaten
 
 
     public Spielercharakter(String name, int hp, int maxHp, Waffe waffe, int erfahrung, Helm helm, Brustplatte brustplatte, Hose hose, Schuhe schuhe) {
