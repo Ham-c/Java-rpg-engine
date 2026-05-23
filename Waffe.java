@@ -12,7 +12,13 @@ public abstract class Waffe {
         this.haltb = haltb;
     }
     
-    public abstract void repair(); //{
+    public abstract void repair();
+
+
+    public int getDamage(){
+        return this.dam;
+    }
+    //{
 //       haltb += 50;
 //       if (haltb > maxHaltb) {
 //          haltb = maxHaltb;

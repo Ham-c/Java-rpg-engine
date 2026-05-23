@@ -1,7 +1,10 @@
 public class Trident extends Waffe {
 
+public static int triDamage = 40;
+public static int maxDurability = 250;
+
     public Trident() {
-        super("Trident",40, "Wasserstahl", 250, 250);
+        super("Trident",triDamage, "Wasserstahl", 250, maxDurability);
 
     }
     

@@ -127,40 +127,70 @@ public class Welt {
 
     public void openShop() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Du kannst kaufen:");
-        System.out.println("1 - Dreizack. Schaden = " + new Trident().dam + " Haltbarkeit = " + new Trident().haltb + " Preis = 50Gold");
-        System.out.println("2 - Heiltränke (heilt 50 HP). dein HP = " + spielercharakter.hp + " Preis = 5Gold");
-        if (spielercharakter.waffe instanceof Faust) {
-            System.out.println("3 - Holzschwert kaufen. Schaden = " + new Holzschwert().dam + "Haltbarkeit = " + new Holzschwert().haltb + "Preis = 10Gold");
-        } else {
-            System.out.println("3 - Schwert auf Stein verbessern. Schaden = " + new Steinschwert().dam + "Haltbarkeit = " + new Steinschwert().haltb + "Preis = 25Gold");
-        }
-//        System.out.println("Rüstung kaufen");
-        int wahl = scanner.nextInt();
-        if (wahl == 1) {
-            if (spielercharakter.gold >= 50){
-            spielercharakter.waffe = new Trident();
-            System.out.println("Dreizack gekauft"); }
-            else {
-                System.out.println("Nicht genug Gold");
-                openShop();
+        boolean inShop = true;
+
+        while (inShop) {
+            System.out.println("\n=== SHOP === (Gold: " + spielercharakter.gold + ")");
+            System.out.println("1 - Dreizack        | Schaden: " + Trident.triDamage + " | Haltbarkeit: " + Trident.maxDurability + " | Preis: 50 Gold");
+            System.out.println("2 - Heiltrank       | Heilt 50 HP          | Preis: 5 Gold  (HP: " + spielercharakter.hp + ")");
+
+            if (spielercharakter.waffe instanceof Faust) {
+                Holzschwert hs = new Holzschwert();
+                System.out.println("3 - Holzschwert     | Schaden: " + hs.dam + " | Haltbarkeit: " + hs.haltb + " | Preis: 10 Gold");
+            } else {
+                Steinschwert ss = new Steinschwert();
+                System.out.println("3 - Steinschwert    | Schaden: " + ss.dam + " | Haltbarkeit: " + ss.haltb + " | Preis: 25 Gold");
             }
-        } else if (wahl == 2) {
-            System.out.println("Wie viele Tränke möchtest du?");
-            int anzahl = scanner.nextInt();
-            if (spielercharakter.gold >= anzahl*5){
-            spielercharakter.inventar.put("Heiltrank", spielercharakter.inventar.get("Heiltrank") + anzahl); }
-            else {System.out.println("Nicht genug Gold");
-            openShop();}
-        } else {
-            if (spielercharakter.gold >= 10){
-            spielercharakter.waffe = new Steinschwert();}
-            else {System.out.println("Nicht genug Gold");
-            openShop();}
+
+            System.out.println("0 - Shop verlassen");
+            System.out.print("Wahl: ");
+
+            int wahl = scanner.nextInt();
+
+            switch (wahl) {
+                case 0 -> inShop = false;
+
+                case 1 -> {
+                    if (spielercharakter.gold >= 50) {
+                        spielercharakter.gold -= 50;
+                        spielercharakter.waffe = new Trident();
+                        System.out.println("Dreizack gekauft!");
+                    } else {
+                        System.out.println("Nicht genug Gold! (benötigt: 50, vorhanden: " + spielercharakter.gold + ")");
+                    }
+                }
+
+                case 2 -> {
+                    System.out.print("Wie viele Tränke möchtest du? ");
+                    int anzahl = scanner.nextInt();
+                    int kosten = anzahl * 5;
+                    if (spielercharakter.gold >= kosten) {
+                        spielercharakter.gold -= kosten;
+                        spielercharakter.inventar.put("Heiltrank", spielercharakter.inventar.get("Heiltrank") + anzahl);
+                        System.out.println(anzahl + " Heiltrank/Tränke gekauft!");
+                    } else {
+                        System.out.println("Nicht genug Gold! (benötigt: " + kosten + ", vorhanden: " + spielercharakter.gold + ")");
+                    }
+                }
+
+                case 3 -> {
+                    int preis = (spielercharakter.waffe instanceof Faust) ? 10 : 25;
+                    if (spielercharakter.gold >= preis) {
+                        spielercharakter.gold -= preis;
+                        spielercharakter.waffe = (spielercharakter.waffe instanceof Faust) ? new Holzschwert() : new Steinschwert();
+                        System.out.println("Schwert gekauft!");
+                    } else {
+                        System.out.println("Nicht genug Gold! (benötigt: " + preis + ", vorhanden: " + spielercharakter.gold + ")");
+                    }
+                }
+
+                default -> System.out.println("Ungültige Eingabe.");
+            }
         }
-        System.out.println("Ab zum nächsten kampf!");
+
+        System.out.println("Ab zum nächsten Kampf!");
         MonsterSpawner();
-    } // ende von Shop
+    }
 
     public void MonsterSpawner() {
         List<Monster> monsterList = new ArrayList<>();
@@ -252,7 +282,7 @@ public class Welt {
 
             } else if (wahl == 3) {
                 System.out.println("Du versuchst zu fliehen...");
-                double fluchChance = 0.5; // deine Formel hier
+                double fluchChance = 0.5; // später bessere logik hier
                 if (Math.random() < fluchChance) {
                     System.out.println("Du bist erfolgreich geflohen!");
                     geflohen = true;
